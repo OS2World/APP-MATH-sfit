@@ -1,0 +1,18 @@
+ 
+data file name  data.dat
+output file name  out.spt
+fit tolerance  1.000000e-06
+standard deviation  1.000000e+00
+param update  10
+graph update  100
+max no iterations  2147483647
+fit connect points  1
+data connect points  1
+fit include colour  2
+fit exclude colour  4
+data colour  0
+residual type  1
+standard deviation column  3
+x-axis log  0
+y-axis log  0
+custom dll file name  fitfunc.dll

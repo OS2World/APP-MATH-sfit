@@ -1,0 +1,37 @@
+.AUTODEPEND
+
+#   Common definitions for the Borland C++ compiler
+#===================================================================
+
+.SUFFIXES:
+.SUFFIXES: .rc .res .obj .c .asm .hlp .itl .ipf
+
+# GLOBAL CONFIG FOR EVERYTHING in the subdirectories
+#===================================================================
+
+STARTUP = \bcos2\lib\c02.obj
+STARTUPDLL = \bcos2\lib\c02d.obj
+LIB = \bcos2\lib
+INCLUDE = \bcos2\include
+
+#===================================================================
+#
+# Compile switchs  that are enabled
+# -c      compile don't link
+# -v      debug info
+# -sm     multi threaded
+
+CFLAGS  = -c -v -sm
+
+LFLAGS  = -c -x -v  
+LINKDLL = tlink $(LFLAGS) -L$(LIB) $(STARTUPDLL)
+
+DLLLIBS = c2mt + os2
+
+OBJECTS = test.obj
+
+test.dll : $(OBJECTS)  custfunc.def
+	$(LINKDLL) $(OBJECTS),test,,$(DLLLIBS),custfunc.def;
+
+test.obj : test.c
+   bcc $(CFLAGS) test.c

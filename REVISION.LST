@@ -1,0 +1,8 @@
+v1.1.0 
+   - Fixed problem which prevented further fits after an error. It
+     is thus no longer necessary to restart the program after a DLL error.
+   - Fixed include/exclude region which sometimes flagged the wrong points.
+   - Fixed cursor which was not tracking the data.
+v1.09
+   - Save the paths for loading DLLs, interpreter files and the state files
+     to facilitate subsequent load from the same directory.

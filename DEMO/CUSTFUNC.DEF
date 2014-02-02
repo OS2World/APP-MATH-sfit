@@ -1,0 +1,9 @@
+LIBRARY      
+DESCRIPTION  'Custom Fit Function DLL'
+
+DATA MULTIPLE
+
+EXPORTS
+    init_dll_globals @1
+    fitfunc          @2
+    get_dll_info     @3

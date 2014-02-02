@@ -1,0 +1,856 @@
+<index>
+general
+C library
+compiled functions
+configuration
+fitting
+interpreted func
+mouse
+objective
+output
+parameters
+scale
+
+<compiled functions>
+DLLs
+DLL info block
+loading a DLL
+making a DLL
+
+<configuration>
+colours
+connect points
+graph update
+max iterations
+status update
+tolerance
+
+<fitting> 
+auto scale y axis
+exclude regions
+include regions
+fit status
+fit undo
+starting a fit
+show current
+
+<general>
+product info
+demo version
+demo directory
+algorithm
+bugs
+caveats
+data files
+
+<interpreted func>
+C interpreter
+editing functions
+error list
+function library
+output list
+template function
+vector loops
+
+<mouse>
+boxes
+cursor
+
+<objective>
+chisquare
+summed squares
+summed absolutes
+
+<output>
+splot file
+tabular file
+.ini
+
+<parameters>
+adding
+changing
+deleting
+cloning
+increments
+initial choices
+limits
+marking
+
+<scale>
+auto scale
+box zoom
+enter limits
+undo zoom
+
+<C library>
+abs
+acos
+asin
+atan
+atan2
+atoi
+atof
+ceil
+cos
+exit
+exp
+fabs
+floor
+fmod
+free
+log
+log10
+malloc
+pow
+puts
+printf
+print
+sin
+sqrt
+sizeof
+sprintf
+strcat
+strcpy
+strlen
+ 
+
+<product info>
+ This is Sfit version 1.0.1
+
+ THIS PROGRAM WAS WRITTEN BY THOMAS W. STEINER
+ COPYRIGHT 1992 - 1994, ALL RIGHTS RESERVED
+ THERE IS NO WARRANTY OF ANY KIND. 
+ USE AT YOUR OWN RISK.
+ THIS IS NOT FREEWARE. 
+ TO REGISTER YOUR COPY SEND $35 TO 
+
+	   T.W. Steiner
+	312 - 1230 Haro St.
+     Vancouver, BC, V6E - 4J9  
+	      Canada
+       e-mail steiner@sfu.ca
+
+ Registered users will receive upgrades
+ as they become available
+
+<demo version>
+ The demo version is identical to the full version except 
+ in output capability. The demo version will not output 
+ the result of a fit to a file nor will it update the 
+ current *.ini file with the latest parameters. 
+ These restrictions are designed in order to allow 
+ evaluation of the program but make it sufficiently 
+ inconvenient to use the results that there is some 
+ motivation for people to register. Note that it is still 
+ possible to use the full fitting capabilities of the 
+ program. 
+
+<demo directory>
+ The demo sub directory contains a number of *.ini files
+ which contain the saved state of some demonstration fits.
+ To load one of these demo fits select 'Restore Saved State'
+ from the 'File' menu. The cubic.ini is a simple cubic
+ fit. The ndens.ini calculates the electron density as a 
+ function of impurity concentrations and illustrates the
+ use of additional data columns to read in more data. The
+ swansl.ini is a magnetization transfer calculation on 
+ several tissues and illustrates a multi-valued function.
+ The above fit also does a numerical integral as part of
+ the fitting process and thus runs much slower. The 
+ interp.ini demo is the same as the cubic demo except that
+ it uses an interpreted function rather than a compiled
+ function.
+
+<algorithm>
+ This program is a general purpose non-linear fitting 
+ program capable of fitting any computable function to 
+ data. It uses the Simplex algorithm (not to be confused 
+ with the linear programming Simplex) which has been shown 
+ to be almost as efficient as the method of steepest 
+ descent but is much easier to use and more general. In 
+ particular, the calculated function need not be 
+ differentiable. Also limits on parameter values are 
+ easily applied. The program attempts to minimize the 
+ objective function, which is the summed function of the 
+ difference between the calculated function and read in 
+ data over all data points, by varying the marked 
+ parameters. 
+
+<bugs>
+ In the vast majority of cases trouble with sfit can be
+ traced back to a problem with the user created DLL. In
+ particular overwriting the ends of the global data array
+ will cause unpredictable results. Thus if problems arise
+ during or after doing a fit or showing the current result 
+ then have a good hard look at your function and compare it
+ to the ones in the demo and dll directories. If you do find
+ a bug that appears to be associated with sfit itself then
+ send the DLL source along with any data files and parameter
+ lists to steiner@sfu.ca. Then if I can reproduce your problem
+ it will be fixed. Also feel free to submit suggestions on 
+ possible improvements to the program. If your suggestions 
+ make sense to me and do not conflict with what other people
+ want then they will probably be implemented.
+
+<caveats>
+ The results of a non-linear fit cannot be assumed to be 
+ the best possible fit. Restarting the fitting procedure 
+ with different parameters might produce a better fit. 
+ There is no way of knowing if one is stuck in a local 
+ minimum of the objective function. It is best if the 
+ parameters can be made as orthogonal (decoupled) as 
+ possible since this simplifies the "surface" of the 
+ objective function. It is also important to start the fit 
+ with reasonable starting parameters to insure convergence 
+ to a good fit. If the fit does not converge to something 
+ reasonable It might be necessary to tweak the parameters 
+ by "hand" using the parameter edit function until the 
+ function has at least the right general shape. 
+
+<data files>
+ The data to which a function is to be fit must be read in 
+ from an ASCII file. The format should be as follows: The 
+ first column should be the x or independent axis values. 
+ The second column should be the dependent or y axis 
+ values. The number of data points in the data set are 
+ taken to be the same as the number of rows of tabular 
+ data in the data file. Blank lines are ignored. Lines not 
+ starting with a number are considered comment lines and 
+ are ignored. WARNING be sure comment lines do not start 
+ with a number. There may be additional columns in the 
+ data set. One use for additional columns is to enter a 
+ standard deviation for each point to be used in 
+ conjunction with the chisquare objective function. 
+ Additional columns may also be used to supply additional 
+ values needed by the fitting function in order to 
+ calculate the function. Note however that if there are 
+ additional column they must contain a value for each data 
+ point. Columns may be separated by a comma or spaces. 
+ 
+<DLLs>
+ Compiled fitting functions are contained in Dynamic Link 
+ Libraries or DLLs. These are linked in while the program 
+ is running and thus only the currently used function is 
+ loaded in. Furthermore, DLLs can be added to the list of 
+ available DLLs by anyone who has an appropriate C 
+ compiler. The source code for this program is not 
+ required since a DLL can be compiled on its own. The 
+ function in the DLL can be arbitrarily complicated. All 
+ that is required is that it calculate a function based on 
+ the parameters to be compared with the read in data. 
+
+<DLL info block>
+ All DLLs should contain a built in information block 
+ which describes the fitting function. Part of this 
+ description should include a list of required parameters 
+ descriptions. 
+
+<loading a DLL>
+ Once a DLL has been written and compiled it can be loaded 
+ in simply by selecting "DLL load" in the "compiled" sub 
+ menu of the "function" menu. This will open up a file 
+ selection dialog box. 
+
+<making a DLL>
+ In order to make a DLL one should start with an 
+ existing DLL and edit it in order to customize it for 
+ the new application. In particular, the demo DLL 
+ custfunc.c contains comments indicating areas that may 
+ need to be modified. When the modifications are 
+ complete compile the function as a DLL. For users of 
+ the Borland (IBM) compiler a supplied bordll.mak 
+ (ibmdll.mak) makefile is included. To use this edit 
+ the source name in bordll.mak (ibmdll.mak) and then 
+ type make -fmakedll (nmake /f ibmdll.mak) to start the 
+ compiler. Note that the file custfunc.def is also 
+ required. Note that DLLs may not be renamed after 
+ making thus the makefile should be edited so that the 
+ generated DLL has the desired final name. If you make 
+ a DLL that you believe may be of use to other people
+ send it to me by e-mail and I will include it in 
+ future releases.
+
+<colours>
+ There are three selectable colours. One for the read in 
+ data, one for the generated fit and one for the 
+ calculated function in the excluded regions. The colours 
+ can be set using the "config" menu item in the "file" 
+ menu. 
+
+<connect points>
+ It is possible to have the data and fitted points drawn 
+ as connected or as isolated data points. The later choice 
+ is appropriate for multi valued functions. The drawing 
+ style is set using the "config" menu item in the "file" 
+ menu. 
+ 
+<graph update>
+ The graph update count is how often, in terms of 
+ iterations of the fitting loop, the current best fit 
+ should be displayed. It can be set using the "config" 
+ menu item in the "file" menu. 
+
+<status update> 
+ The status update count is how often, in terms of 
+ iterations of the fitting loop, the current best values 
+ should be updated in the status dialog (if open). It can 
+ be set using the "config" menu item in the "file" menu. 
+
+<tolerance> 
+ The fitting loop terminates once the difference in 
+ objective function values between the best and worst 
+ vertex is less than the value of the tolerance parameter 
+ field or the number of iterations is greater than the 
+ value specified in in the max iterations field. These 
+ values can be set using the "config" menu item in the 
+ "file" menu. 
+
+<max iterations> 
+ The fitting loop terminates once the difference in 
+ objective function values between the best and worst 
+ vertex is less than the value of the tolerance parameter 
+ field or the number of iterations is greater than the 
+ value specified in in the max iterations field. These 
+ values can be set using the "config" menu item in the 
+ "file" menu. 
+
+<exclude regions>
+ One or more portion of the data set may be excluded from 
+ the fitting procedure by using the right mouse button to 
+ draw a box around the region to be excluded and then 
+ selecting the "exclude region" menu item in the "fit" 
+ menu. The fit will still be calculated in the excluded 
+ region but the result will not contribute to the 
+ objective function. The fit in excluded regions will be 
+ drawn in a different colour if set up properly in the 
+ configuration. If the first specified region is an 
+ exclude region then all outside points are included.
+
+<include regions>
+ One or more portion of the data set may be explicitly 
+ included in the fitting procedure by using the right 
+ mouse button to draw a box around the region to be 
+ excluded and then selecting the "include region" menu 
+ item in the "fit" menu. The fit will still be 
+ calculated outside the included region but the result 
+ will not contribute to the objective function. The fit 
+ outside the included regions will be drawn in a 
+ different colour if set up properly in the 
+ configuration. If the first specified region is an 
+ include region then all outside points are excluded. 
+ If no regions at all are specified then all points are 
+ included by default. 
+
+
+<adding>
+ Parameters are added by selecting the "Add" menu item of 
+ the "param" menu. This will open a dialog box in which 
+ the parameter's ordinal number, label, initial value, 
+ initial increment, and limits can be entered.
+
+<changing>
+ A parameter's value or limits can be changed by 
+ selecting the "edit" menu item of the "param" menu.
+ This opens a dialog in which one parameter can be 
+ selected and its values edited. Hitting return or the
+ "update" push button will cause the function to be 
+ evaluated with the changed parameters. Upon completing 
+ the modifications select the "accept" push button which 
+ will save the parameter changes. Alternatively selecting 
+ the "cancel" push button causes the changes to be 
+ undone.
+
+<deleting>
+ A parameter is deleted by choosing the "delete" menu 
+ item in the "param" menu. This opens a dialog box in 
+ which the parameter(s) to be deleted can be marked.
+
+<cloning>
+ A parameter is cloned by choosing the "clone" menu 
+ item in the "param" menu. This opens a dialog box in 
+ which the parameter(s) to be cloned can be marked. If
+ the parameter name contains a number then that number
+ is incremented by one in the cloning process. This 
+ function is useful for duplicating a list of parameters 
+ for a second similar object.
+
+<increments>
+ The increment value associated with a parameter is the
+ initial size of the variation to be tried. This will 
+ expand or shrink as needed to zero in on a good fit. If 
+ it is initially chosen too small or large convergence 
+ will take considerably longer. Also if it is too small 
+ it may not be able to "climb" out of a local minimum.
+ An initial value 1/3 of the parameter value is usually
+ a reasonable increment value. If the increment is zero 
+ the parameter will not be varied.
+
+<initial choices>
+ It is important that the initial choices for the 
+ parameters be reasonable in order that the fit can 
+ converge to a reasonable solution. It is usually best
+ to edit the parameters manually or to fit with only a 
+ sub set of the parameters marked until the function has 
+ at least the right general shape before marking all the 
+ parameters and fitting.
+
+<limits>
+ The parameters can be constrained to a region by setting 
+ the upper and lower limits accordingly. If for 
+ example a parameter should not be negative then set 
+ the lower limit to 0.0.
+
+<marking>
+ Only marked parameters are varied by the fitting 
+ program. Parameters are marked by holding down the
+ left mouse button and moving the mouse over the 
+ parameters to be marked and then releasing the left 
+ mouse button. This works for continuous ranges of 
+ parameters. Parameters can also be marked individually 
+ by holding down the <ctrl> key and clicking the left 
+ mouse button on the parameters to be marked.
+
+<box zoom>
+ It is possible to zoom in on a region by first drawing a box around 
+ the region of interest by holding down the right mouse 
+ button and then selecting the "box zoom" menu item in 
+ the "scale" menu.
+
+<enter limits>
+ Display limits can also be entered numerically by 
+ selecting the "limits" menu item in the "scale" menu.
+
+<auto scale y axis>
+ If autoscale is on as indicated by the check mark next 
+ to the "autoscale" menu item in the "fit" menu then 
+ while fitting the y scale is adjusted so that both the 
+ data and the calculated function are visible. If 
+ autoscale is not on the y scale is not adjusted. This 
+ means that the calculated function may not even be 
+ visible if it is far off. 
+
+<auto scale>
+ Selecting the "auto scale" menu item in the "scale"
+ menu causes the scale to be set to the limits of the
+ data or fit which ever is larger.
+
+<undo zoom>
+ Previous box zooms or limit sets can be undone by 
+ selecting the "undo zoom" menu item from the "scale" 
+ menu. Several levels of undo are possible.
+
+<fit status>
+ While the fit is in progress the current status may be 
+ displayed by selecting the "status" menu item of the 
+ "fit" menu. The status dialog displays the number of 
+ iterations completed, the best and worst values of the 
+ objective function and the values of the parameters 
+ corresponding to the current best vertex. 
+
+<fit undo>
+ The parameters can be restored to their values before the 
+ last fit by selecting the "undo fit" menu item in the 
+ "fit" menu. 
+
+<starting a fit>
+ In order to do a fit first mark the parameters to be 
+ adjusted using the "param" menu and then select the 
+ "start fit" menu item of the "fit" menu. 
+
+<show current>
+ The "show current" menu item of the fit menu calculates 
+ and displays the fit using the current value of the 
+ parameters. 
+
+<chisquare>
+ Choosing "chisqr" as the objective function requires that 
+ the uncertainty in each data point be specified as a 
+ standard deviation. There are three choices for this. The 
+ first is taking the std. dev. to equal the square root of 
+ the data value. This is appropriate for the data 
+ corresponding to counting random events. The second 
+ choice is entering a known std. dev. to be applied to all 
+ data points and the last choice is entering a column 
+ number which contains the standard deviation for each 
+ data value and is to be read in along with the data. 
+
+<summed squares>
+ The objective function is the sum of the squared 
+ differences between the data points and the calculated 
+ points divided by the number of points. Only data points 
+ not in an exclude region are used in the objective 
+ function. 
+
+<summed absolutes>
+ The objective function is the sum of the absolute 
+ differences between the data points and the calculated 
+ points divided by the number of points. Only data points 
+ not in an exclude region are used in the objective 
+ function. 
+
+<boxes>
+ Boxes for the exclude region or box zoom are drawn
+ by pushing the right mouse button at one corner and then 
+ dragging the mouse to the opposite corner holding down 
+ the right button. Releasing the right button sets the 
+ second corner.
+
+<cursor>
+ Moving the mouse while holding down the left mouse 
+ button causes a cross hair cursor to be drawn at the x 
+ position of the mouse and y position corresponding to 
+ the y data value at that x value. The coordinates are 
+ written in the title bar. If calculated data is also 
+ present the calculated value and error are also 
+ displayed.
+
+<splot file>
+ The results of a fit may be saved in a splot file i.e. an 
+ ASCII file which can be read in by the Splot program 
+ (available separately) in order to turn it into a 
+ publication quality figure. Select "Gen splot file" in 
+ the "file" menu to generate a splot file. This feature 
+ has been disabled in the demo version. 
+
+<tabular file>
+ The results of a fit may be saved in a tabular ASCII 
+ file. This file will consist of the data as read in along 
+ with an additional column for the corresponding best 
+ generated fit. Select "File result as" in the "file" menu 
+ to generate a tab file. This feature has been disabled in 
+ the demo version. 
+
+<.ini> 
+ The currently chosen values of the configuration, data 
+ file name, fitting function file name, objective 
+ function, parameter values etc. is all saved in the file 
+ sfit.ini upon exiting the program and the state is 
+ automatically restored upon restarting the program. It is 
+ possible to start the program using a different .ini file 
+ by specifying the name on the command line. A previously 
+ saved state may also be loaded from the "file" menu. The 
+ current state of the fitting program may be saved at any 
+ time by save state from the "file" menu. It is 
+ advantageous to have separate *.ini files for each 
+ different fitting function as then the number,approximate 
+ value and label of each parameter need not be edited when 
+ switching from one function to another. The demo version 
+ deliberately does not update the parameters stored in the 
+ initialization files. 
+ 
+<C interpreter>
+ Sfit has a built in vector C interpreter that allows fits 
+ with relatively simple functions to be done without 
+ building a DLL. In order to do interpreted fits no 
+ compiler is required. The interpreter understands a large 
+ sub set of C. In particular, it can only handle up to two 
+ dimensional arrays and it does not have structures or 
+ unions. It has only four data types: char, int, float an 
+ double. It does contain most of the standard C math 
+ library. Fitting is far from an ideal application for 
+ interpreters since fitting involves calculating the same 
+ function over and over again incurring the interpreter 
+ overhead each time. Nevertheless this interpreter has 
+ been optimized for vector calculations and is hence quite 
+ usable for relatively simple functions. It will run 
+ approximately one order of magnitude slower than the 
+ equivalent compiled function. 
+
+<editing functions>
+ A function to be interpreted must have the same standard 
+ structure as the example interpreted function interp.c.
+ Comments indicate which areas of the code may be 
+ modified for your function. The function can be edited 
+ from within the Sfit program by selecting the "edit" 
+ menu item in the "interpret" sub menu. This will open  
+ an edit dialog box with the current function displayed.
+ The dialog box editor is however rudimentary and most
+ people will probably prefer to edit the function with
+ an external editor and then loading it in using the
+ "load function" menu item in the "interpret" menu.
+
+<error list>
+ If an error occurred interpreting the function an error
+ message is returned and put into the error list. The 
+ last error list can be viewed by selecting the "last 
+ error" menu item in the "interpret" menu. The error
+ list is deleted after viewing it once.
+
+<function library>
+ The built in C interpreter contains a selection 
+ of standard functions. Consult the C library
+ help item for details.
+
+<output list>
+ If interpreting the function generated any output
+ using say the printf() library function then it will
+ put into the  output list. The 
+ last output list can be viewed by selecting the  
+ "output" menu item in the "interpret" menu. The
+ output list is deleted after viewing it once.
+
+<template function>
+ In order to make the development of a function
+ to be interpreted as simple and the least error prone 
+ as  possible there is the "Gen template" menu item of 
+ the "interpret" menu. This menu choice will generate 
+ a shell file including definitions of all the currently
+ defined parameters leaving only the actual function 
+ unspecified. Thus the recommended approach when starting
+ a new interpreted fit is to load in the data, define all the needed 
+ parameters using the "Add" menu item in the "param" 
+ menu then select "Gen template" to generate the function 
+ outline and lastly edit the function to fill in the 
+ computational details. 
+ 
+<vector loops>
+ In order to make interpreted fitting a realistic 
+ endeavour the interpreter has been optimized to 
+ "vectorize" the most common fitting loops. In particular
+ loops such as:
+
+   double x[Ndat];
+   for (i = 0;i < Ndat;i++)
+      {
+      x[i] = datx[i] - *P1;
+      datt[i] = x[i] * (x[i] * (x[i] * *P5 + *P4) + *P3) + *P2;
+      }
+
+ can be evaluated without having to loop through Ndat 
+ times. Instead in the first line x[i] is evaluated for
+ all values before moving to the second line. Only 
+ certain loops can be vectorized. The rules are:
+
+  - Only standard incrementing or decrementing for loops.
+  - Start and stop limits must be constants and known at
+    the start of the loop execution.
+  - May not contain any conditional expressions
+    such as if (i > 10) break;
+  - Must not contain any assignments to scalars. Note 
+    that in the example above the temporary variable x 
+    was defined as a vector rather than a scalar.
+  - Inclusion of math function library elements is 
+    allowed as in x[i] = sin(daty[i]); 
+  - Limited index math is allowed such as in 
+    x[i] = y[i - 2] + z[i + 2]; but only additive 
+    constants. 
+  - Using index shifts is potentially dangerous.
+    Remember that each line is only executed once so it 
+    is possible to build in data dependencies which will
+    result in incorrect operation. Consider the 
+    following:
+    for (i = 1;i <= 10;i++)
+	x[i] = x[i - 1];
+    Serial execution results in all x values equal to 
+    x[0] but vector execution results in new x equal to
+    old x with all values shifted over one slot.
+  - When using index shifts the start and end of a loop
+    are troublesome since the array limits could be 
+    exceeded. Instead of using conditionals which would
+    cause vectorization failure do the first and/or last
+    iterations outside of the loop.
+
+ Vectorization failure causes the loop to be evaluated 
+ serially with MUCH slower execution.
+
+
+<abs>
+ int abs(int i);
+ 
+ Returns the absolute value of i;
+ 
+<acos>
+ double acos(double x);
+ 
+ Returns the arc cosine of the value x. x must be 
+ between -1 and 1. Returns a value between 0 and pi. 
+ 
+<asin>
+ double asin(double x);
+ 
+ Returns the arc sine of the value x. x must be between 
+ -1 and 1. Returns a value between -pi/2 and pi/2. 
+ 
+<atan>
+ double atan(double x);
+ 
+ Returns the arc tangent of the value x. Returns a value 
+ between -pi/2 and pi/2. 
+ 
+<atan2>
+ double atan2(double y,double x);
+ 
+ Returns the arc tangent of the value y/x. Returns a value 
+ between -pi and pi. 
+ 
+<atoi>
+ int atoi(char *str);
+ 
+ Converts a string to an integer. The string must contain 
+ only digits. 
+ 
+<atof>
+ double atof(char *str);
+ 
+ Converts a string to a double. The string must contain only 
+ digits and 'e', 'E', '.', '-' and '+' . 
+ 
+<ceil>
+ double ceil(double x);
+ 
+ Rounds up x to nearest integer value. 
+ 
+<cos>
+ double cos(double x);
+ 
+ Returns the cosine of x. x is specified in degrees. 
+ 
+<exit>
+ void exit(int status);
+ 
+ Terminates the execution of the program. If the status is 0 
+ then it will be considered a normal exit otherwise an error 
+ induced exit. 
+ 
+<exp>
+ double exp(double x);
+ 
+ Calculates the exponential function e^x. 
+ 
+<fabs>
+ double fabs(double x); 
+ 
+ Returns the absolute value of x. It is like abs() but works 
+ with floating point numbers rather than integers. 
+ 
+<floor>
+ double floor(double x);
+ 
+ Rounds down x to the nearest integer. 
+ 
+<fmod>
+ double fmod(double x,double y);
+ 
+ Returns the remainder of x/y. 
+ 
+<free>
+ void free(char *ptr);
+ 
+ Frees the block of memory pointed to by ptr. The memory 
+ must have been previously allocated using malloc(). 
+ 
+<log>
+ double log(double x);
+ 
+ Returns the natural log of x. 
+ 
+<log10>
+ double log10(double x);
+ 
+ Returns the log base 10 of x.
+ 
+<malloc>
+ char *malloc(int size);
+ 
+ Allocates a block of memory of size bytes and returns a 
+ pointer to the block. malloc returns NULL if there is 
+ insufficient free memory. 
+ 
+<pow>
+ double pow(double x,double y);
+ 
+ Calculates x to the power y.
+ 
+<puts>
+ int puts(char *str);
+ 
+ This routine writes the string str to the output file and 
+ starts a new line. 
+ 
+<printf>
+ int printf(char *format,...);
+ 
+ Prints the formatted data to the output file. The format 
+ string specifies the type and number of values to print. 
+ Some common examples include: 
+ 
+ printf("i = %d",i); prints the 
+ integer value i. 
+ 
+ printf("x = %g",x); prints the 
+ floating point value x. 
+ 
+ printf("text = %s",str); prints the 
+ string str. 
+ 
+ Multiple values can be printed as in 
+ printf("%d %d %g %s",i,j,x,str); 
+ 
+ The format specifiers can also include field width 
+ information and justification etc. Consult a standard C 
+ text for more details. 
+ 
+<print>
+ void print(v,...);
+ 
+ Prints the value v which can be of any scalar type. i.e 
+ int, char, float, double or a pointer. This is not a 
+ function found in the standard C library. 
+ 
+<sin>
+ double sin(double x);
+ 
+ Returns the sine of x. x must be specified in degrees. 
+ 
+<sqrt>
+ double sqrt(double x);
+ 
+ Calculates the square root of x. x must be a positive 
+ number. 
+ 
+<sizeof>
+ int sizeof(t);
+ 
+ Returns the number of bytes required to store the value of 
+ type t. 
+ 
+<sprintf>
+ int sprintf(char str,char 
+     *format,...); 
+ 
+ Prints the formatted data to the string str. The format 
+ string specifies the type and number of values to print. 
+ Some common examples include: 
+ 
+ printf("i = %d",i); prints the 
+ integer value i. 
+ 
+ printf("x = %g",x); prints the 
+ floating point value x. 
+ 
+ printf("text = %s",str); prints the 
+ string str. 
+ 
+ Multiple values can be printed as in 
+ printf("%d %d %g %s",i,j,x,str); 
+ 
+ The format specifiers can also include field width 
+ information and justification etc. Consult a standard C 
+ text for more details. 
+ 
+<strcat>
+ void strcat(char *dest, char 
+      *source); 
+ 
+ Concatenates the string source to the string dest. 
+ 
+<strcpy>
+ void strcpy(char *dest, char 
+      *source); 
+ 
+ Copies the string source to the string dest. 
+ 
+<strlen>
+ int strlen(char *str);
+ 
+ Returns the length of the string str. 
